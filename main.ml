@@ -30,7 +30,7 @@ let length (x: 'a list): int =
   let rec inner n = function
     | [] -> n
     | _ :: t -> inner (n + 1) t
-  in 
+  in
     inner 0 x
 
 (* Problem 5 *)
@@ -38,7 +38,7 @@ let reverse (x: 'a list): 'a list =
   let rec inner acc = function
     | [] -> acc
     | h :: t -> inner (h :: acc) t
-  in  
+  in
     inner [] x
 
 (* Problem 5 *)
@@ -47,7 +47,7 @@ let is_palindrome (x: 'a list): bool =
 
 (* Problem 6 *)
 type 'a node =
-  | One of 'a 
+  | One of 'a
   | Many of 'a node list
 
 let flatten x =
@@ -55,6 +55,32 @@ let flatten x =
     | [] -> acc
     | One h :: t -> inner (h :: acc) t
     | Many h :: t -> inner (inner acc h) t
-  in 
+  in
     reverse (inner [] x)
+
+(* Problem 7 *)
+let compress x =
+  let rec inner last acc = function
+    | [] -> (last :: acc)
+    | h :: t -> if h = last then inner last acc t else inner h (last :: acc) t
+  in match x with
+    | [] -> []
+    | h :: t -> reverse (inner h [] t)
+
+let rec compress_v2 = function
+  | a :: (b :: _ as t) -> if a = b then compress_v2 t else a :: compress t
+  | a -> a
+
+(* Problem 8 *)
+let pack list =
+  let rec inner current acc = function
+    | [] -> []
+    | [a] -> (a :: current) :: acc
+    | a :: (b :: _ as t) ->
+      if a = b then inner (a :: current) acc t
+      else inner [] ((a :: current) :: acc) t
+  in
+    reverse (inner [] [] list)
+
+
 
